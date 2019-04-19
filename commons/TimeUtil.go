@@ -2,7 +2,7 @@ package commons
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
+	"log"
 	"strconv"
 	"time"
 )

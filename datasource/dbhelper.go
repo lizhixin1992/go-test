@@ -3,7 +3,7 @@ package datasource
 import (
 	"fmt"
 	"github.com/go-xorm/xorm"
-	"github.com/sirupsen/logrus"
+	"log"
 	"sync"
 	"github.com/lizhixin1992/test/conf"
 	"time"
@@ -32,7 +32,7 @@ func InstanceMaster() *xorm.Engine {
 		c.UserName, c.Password, c.Host, c.Port, c.DbName)
 	engine, err := xorm.NewEngine(conf.DriverName, driverSource)
 	if err != nil {
-		logrus.Debug("dbhelper.DbInstanceMaster,", err)
+		log.Fatal("dbhelper.DbInstanceMaster,", err)
 		return nil
 	}
 	//Debug模式，打印全部的SQL语句
