@@ -12,7 +12,7 @@ import (
 
 type Bootstrapper struct {
 	*iris.Application
-	AppName      string
+	Appname      string
 	AppOwner     string
 	AppSpawnDate time.Time
 	Sessions     *sessions.Sessions
@@ -22,7 +22,7 @@ type Configurator func(*Bootstrapper)
 
 func New(appName, appOwner string, cfgs ...Configurator) *Bootstrapper {
 	b := &Bootstrapper{
-		AppName:      appName,
+		Appname:      appName,
 		AppOwner:     appOwner,
 		AppSpawnDate: time.Now(),
 		Application:  iris.New(),
@@ -55,7 +55,7 @@ func (b *Bootstrapper) SetUpViews() {
 //设置session
 func (b *Bootstrapper) SetUpSession(expires time.Duration, cookieHashKey, cookieBlockKey []byte) {
 	sessions.New(sessions.Config{
-		Cookie:   "SECRET_SESS_COOKIE_" + b.AppName,
+		Cookie:   "SECRET_SESS_COOKIE_" + b.Appname,
 		Expires:  expires,
 		Encoding: securecookie.New(cookieHashKey, cookieBlockKey),
 	})
@@ -65,7 +65,7 @@ func (b *Bootstrapper) SetUpSession(expires time.Duration, cookieHashKey, cookie
 func (b *Bootstrapper) SetUpErrorHandlers() {
 	b.OnAnyErrorCode(func(ctx iris.Context) {
 		err := iris.Map{
-			"app":     b.AppName,
+			"app":     b.Appname,
 			"status":  ctx.GetStatusCode(),
 			"message": ctx.Values().Get("message"),
 		}
