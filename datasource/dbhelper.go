@@ -2,10 +2,11 @@ package datasource
 
 import (
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
+	"github.com/lizhixin1992/test/conf"
 	"log"
 	"sync"
-	"github.com/lizhixin1992/test/conf"
 	"time"
 )
 

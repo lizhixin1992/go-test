@@ -25,15 +25,15 @@ func NewUserservice() *userService {
 }
 
 func (u *userService) Save(data *models.User) error {
-	return u.Save(data)
+	return u.dao.Save(data)
 }
 
 func (u *userService) Update(data *models.User) error {
-	return u.Update(data)
+	return u.dao.Update(data)
 }
 
 func (u *userService) Delete(id int) error {
-	return u.Delete(id)
+	return u.dao.Delete(id)
 }
 
 //func (d *UserDao) DeleteNot(id int) error{
@@ -41,9 +41,9 @@ func (u *userService) Delete(id int) error {
 //}
 
 func (u *userService) GetById(id int) *models.User {
-	return u.GetById(id)
+	return u.dao.GetById(id)
 }
 
 func (u *userService) GetAll() []models.User {
-	return u.GetAll()
+	return u.dao.GetAll()
 }

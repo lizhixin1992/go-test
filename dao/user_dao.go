@@ -3,9 +3,9 @@ package dao
 import (
 	"fmt"
 	"github.com/go-xorm/xorm"
-	"strconv"
 	"github.com/lizhixin1992/test/models"
 	"github.com/lizhixin1992/test/models/conditions"
+	"strconv"
 )
 
 type UserDao struct {
@@ -37,12 +37,14 @@ func (d *UserDao) Delete(id int) error {
 //	_,err := d.engine.Id(id).Update()
 //}
 
-func (d *UserDao) GetById(id int) (user *models.User) {
-	err := d.engine.Where("id=?", id).Find(&user)
-	if err != nil {
-		return user
+func (d *UserDao) GetById(id int) *models.User {
+	data := &models.User{Id: id}
+	ok, err := d.engine.Get(data)
+	if ok && err == nil {
+		return data
 	} else {
-		return user
+		data.Id = 0
+		return data
 	}
 }
 
@@ -64,18 +66,17 @@ func (d *UserDao) GetAll() []models.User {
 //
 //}
 
-func setCondition(cond *conditions.UserCondition) (sql string){
+func setCondition(cond *conditions.UserCondition) (sql string) {
 	sql = "select id,name,age,addres,createTime,updateTime where"
 	switch value := interface{}(cond.Name).(type) {
 	case string:
 		sql += " name = " + value
-		fmt.Println("string",value)
+		fmt.Println("string", value)
 	case int:
-		fmt.Println("int",value)
+		fmt.Println("int", value)
 	default:
-		fmt.Println("unknown",value)
+		fmt.Println("unknown", value)
 	}
 	sql += " limit " + strconv.Itoa(cond.StartRow) + "," + strconv.Itoa(cond.EndRow)
 	return sql
 }
-

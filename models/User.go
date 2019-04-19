@@ -6,5 +6,5 @@ type User struct {
 	Age        int
 	Addrs      string
 	CreateTime int
-	Updatetime int
+	UpdateTime int
 }
