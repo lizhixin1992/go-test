@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"testproject/commons"
+	"github.com/lizhixin1992/test/commons"
 )
 
 func main() {
