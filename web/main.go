@@ -1,13 +1,17 @@
-package web
+package main
 
 import (
-	"fmt"
-	"github.com/lizhixin1992/test/commons"
+	"github.com/lizhixin1992/test/bootstrap"
+	"github.com/lizhixin1992/test/web/routes"
 )
 
+func newApp() (b *bootstrap.Bootstrapper){
+	app := bootstrap.New("test-go","lizhixin")
+	app.Bootstrap()
+	app.Configure(routes.Configure)
+}
+
 func main() {
-	//cond := &conditions.UserCondition{Name: "111",Age:11,Addrs:"3333",Page:1,Size:2}
-	//d := dao.NewUserDao()
-	//d.SetCondition(cond)
-	fmt.Println(commons.GetNowUnix())
+	app := newApp()
+	app.Listen(":8080")
 }
