@@ -9,6 +9,7 @@ func newApp() (b *bootstrap.Bootstrapper){
 	app := bootstrap.New("test-go","lizhixin")
 	app.Bootstrap()
 	app.Configure(routes.Configure)
+	return app
 }
 
 func main() {
