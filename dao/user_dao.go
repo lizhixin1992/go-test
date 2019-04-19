@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/go-xorm/xorm"
 	"strconv"
-	"testproject/models"
-	"testproject/models/conditions"
+	"github.com/lizhixin1992/test/models"
+	"github.com/lizhixin1992/test/models/conditions"
 )
 
 type UserDao struct {

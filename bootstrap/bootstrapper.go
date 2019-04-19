@@ -6,7 +6,7 @@ import (
 	"github.com/kataras/iris/middleware/logger"
 	"github.com/kataras/iris/middleware/recover"
 	"github.com/kataras/iris/sessions"
-	"testproject/conf"
+	"github.com/lizhixin1992/test/conf"
 	"time"
 )
 

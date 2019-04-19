@@ -5,7 +5,7 @@ import (
 	"github.com/go-xorm/xorm"
 	"github.com/sirupsen/logrus"
 	"sync"
-	"testproject/conf"
+	"github.com/lizhixin1992/test/conf"
 	"time"
 )
 

@@ -1,6 +1,6 @@
 package commons
 
-import "testproject/models/conditions"
+import "github.com/lizhixin1992/test/models/conditions"
 
 func SetLimitSize(condition *conditions.UserCondition) *conditions.UserCondition {
 	if condition.Page > 0 {
