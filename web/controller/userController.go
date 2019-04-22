@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
 	"github.com/lizhixin1992/test/commons"
@@ -74,4 +75,12 @@ func setResponseFail() mvc.Response {
 			"errorMessage": "fail",
 		},
 	}
+}
+
+func (c *UserController) BeforeActivation(b mvc.BeforeActivation) {
+	fmt.Println("******************* before *********************")
+}
+
+func (c *UserController) AfterActivation(b mvc.AfterActivation) {
+	fmt.Println("******************* after *********************")
 }

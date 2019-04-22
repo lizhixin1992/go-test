@@ -5,8 +5,8 @@ import (
 	"github.com/lizhixin1992/test/web/routes"
 )
 
-func newApp() (b *bootstrap.Bootstrapper){
-	app := bootstrap.New("test-go","lizhixin")
+func newApp() (b *bootstrap.Bootstrapper) {
+	app := bootstrap.New("test-go", "lizhixin")
 	app.Bootstrap()
 	app.Configure(routes.Configure)
 	return app
