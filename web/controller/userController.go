@@ -3,7 +3,10 @@ package controller
 import (
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
+	"github.com/lizhixin1992/test/commons"
+	"github.com/lizhixin1992/test/models"
 	"github.com/lizhixin1992/test/services"
+	"log"
 )
 
 type UserController struct {
@@ -35,6 +38,40 @@ func (c *UserController) GetBy(id int) mvc.Result {
 			"errorCode":    "0",
 			"errorMessage": "success",
 			"data":         data,
+		},
+	}
+}
+
+//localhost:8080/save
+func (c *UserController) PostSave() mvc.Result {
+	info := models.User{}
+	err := c.Ctx.ReadJSON(&info)
+	if err != nil {
+		log.Fatal(err)
+		return setResponseFail()
+	} else {
+		date := int(commons.GetNowUnix())
+		info.CreateTime = date
+		info.UpdateTime = date
+		c.Service.Save(&info)
+		return setResponseSuccess()
+	}
+}
+
+func setResponseSuccess() mvc.Response {
+	return mvc.Response{
+		Object: iris.Map{
+			"errorCode":    "0",
+			"errorMessage": "success",
+		},
+	}
+}
+
+func setResponseFail() mvc.Response {
+	return mvc.Response{
+		Object: iris.Map{
+			"errorCode":    "-1",
+			"errorMessage": "fail",
 		},
 	}
 }
