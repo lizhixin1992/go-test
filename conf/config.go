@@ -8,7 +8,7 @@ import (
 var GlobalConf = New()
 
 func New() *toml.Tree {
-	tree, err := toml.LoadFile("GlobalConf.yml")
+	tree, err := toml.LoadFile("./conf/GlobalConf.toml")
 	if err != nil {
 		fmt.Println("loadfile GlobalConf fail", err.Error())
 	}
