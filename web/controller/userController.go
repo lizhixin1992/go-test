@@ -80,6 +80,7 @@ func setResponseFail() mvc.Response {
 func (c *UserController) BeforeActivation(b mvc.BeforeActivation) {
 	fmt.Println("******************* before *********************")
 	fmt.Println(commons.Cache.Get("test1"))
+	fmt.Println(commons.CacheCluster.Get("test"))
 }
 
 func (c *UserController) AfterActivation(b mvc.AfterActivation) {
