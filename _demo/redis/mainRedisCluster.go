@@ -13,5 +13,5 @@ func main() {
 		Password: "",
 	})
 	fmt.Println(client.Set("test1", "redisUtil", 1*time.Hour).Result())
-	fmt.Println(client.Get("test"))
+	fmt.Println(client.Get("test").Result())
 }
