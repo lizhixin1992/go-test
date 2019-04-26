@@ -12,6 +12,7 @@ func main() {
 		Password: "",
 		DB:       0,
 	})
+	defer client.Close()
 	fmt.Println(client.Get("redisUtil"))
 
 }

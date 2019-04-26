@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/gomodule/redigo/redis"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
 	"github.com/lizhixin1992/test/commons"
@@ -79,8 +80,13 @@ func setResponseFail() mvc.Response {
 
 func (c *UserController) BeforeActivation(b mvc.BeforeActivation) {
 	fmt.Println("******************* before *********************")
-	fmt.Println(commons.Cache.Get("test1"))
-	fmt.Println(commons.CacheCluster.Get("test"))
+	fmt.Println("Cache", "****************", commons.Cache.Get("test1"))
+	fmt.Println("CacheCluster", "****************", commons.CacheCluster.Get("test"))
+
+	cp := commons.CachePool.Get()
+	v, _ := redis.String(cp.Do("GET", "redisUtil"))
+	defer cp.Close()
+	fmt.Println("CacheCluster", "****************", v)
 }
 
 func (c *UserController) AfterActivation(b mvc.AfterActivation) {

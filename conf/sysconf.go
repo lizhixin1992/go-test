@@ -15,3 +15,5 @@ const StaticAssets = "./web/public/"
 const Favicon = "favicon.ico"
 
 var SysTimeLocation, _ = time.LoadLocation("Asia/shanghai")
+
+var Tcp = "tcp"
