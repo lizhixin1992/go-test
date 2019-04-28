@@ -11,8 +11,10 @@ func main() {
 		Addr:     "127.0.0.1:6379",
 		Password: "",
 		DB:       0,
+		PoolSize: 5,
 	})
 	defer client.Close()
 	fmt.Println(client.Get("redisUtil"))
+	fmt.Println(client.PoolStats())
 
 }
