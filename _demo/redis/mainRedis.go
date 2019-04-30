@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/go-redis/redis"
+	"github.com/lizhixin1992/test/commons"
 )
 
 func main() {
@@ -64,4 +65,12 @@ func main() {
 
 	//fmt.Println(client.HDel("hset","test","test1").Result())
 	//commons.HDel("hset","test2","test3")
+
+	data := make(map[string]interface{})
+	data["test"] = "wwwwwww"
+	data["test1"] = "11111111"
+	data["test2"] = "22222222"
+	data["test3"] = "33333333"
+	//fmt.Println(client.HMSet("hset",data).Result())
+	commons.HMSet("hset", data)
 }

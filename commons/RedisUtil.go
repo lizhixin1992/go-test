@@ -123,3 +123,22 @@ func HDel(key string, fields ...string) {
 		}
 	}
 }
+
+//返回哈希表 key 中域的数量
+func HLen(key string) (i int) {
+	size, err := redisClient.HLen(key).Result()
+	if err != nil {
+		log.Fatal("redis HLen is err, err : ", err)
+	}
+	return int(size)
+}
+
+//同时将多个 field-value (域-值)对设置到哈希表 key 中
+//此命令会覆盖哈希表中已存在的域
+//如果 key 不存在，一个空哈希表被创建并执行 HMSET 操作
+func HMSet(key string, fields map[string]interface{}) {
+	_, err := redisClient.HMSet(key, fields).Result()
+	if err != nil {
+		log.Fatal("redis HMSet is err, err : ", err)
+	}
+}
