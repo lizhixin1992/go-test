@@ -66,11 +66,22 @@ func main() {
 	//fmt.Println(client.HDel("hset","test","test1").Result())
 	//commons.HDel("hset","test2","test3")
 
-	data := make(map[string]interface{})
-	data["test"] = "wwwwwww"
-	data["test1"] = "11111111"
-	data["test2"] = "22222222"
-	data["test3"] = "33333333"
-	//fmt.Println(client.HMSet("hset",data).Result())
-	commons.HMSet("hset", data)
+	//data := make(map[string]interface{})
+	//	//data["test"] = "wwwwwww"
+	//	//data["test1"] = "11111111"
+	//	//data["test2"] = "22222222"
+	//	//data["test3"] = "33333333"
+	//	////fmt.Println(client.HMSet("hset",data).Result())
+	//	//commons.HMSet("hset", data)
+
+	//commons.LPush("testList","22222")
+	//commons.RPush("testList","end")
+
+	//fmt.Println(commons.LPop("testList"))
+	//fmt.Println(commons.RPop("testList"))
+
+	//commons.LRem("testList",0,"end")
+
+	commons.SAdd("bbb", "111111")
+
 }
