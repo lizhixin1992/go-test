@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/lizhixin1992/test/commons"
 )
 
 func main() {
@@ -82,6 +81,7 @@ func main() {
 
 	//commons.LRem("testList",0,"end")
 
-	commons.SAdd("bbb", "111111")
+	//commons.SAdd("bbb", "111111")
 
+	//fmt.Println(commons.SMembers("a"))
 }

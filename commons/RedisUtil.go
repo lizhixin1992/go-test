@@ -335,3 +335,13 @@ func SMove(key1, key2 string, member interface{}) {
 		log.Fatal("redis SMove is err, err : ", err)
 	}
 }
+
+//返回集合 key 中的所有成员。
+//不存在的 key 被视为空集合。
+func SMembers(key string) (value interface{}) {
+	value, err := redisClient.SMembers(key).Result()
+	if err != nil {
+		log.Fatal("redis SMembers is err, err : ", err)
+	}
+	return value
+}
