@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-redis/redis"
+	"github.com/lizhixin1992/test/commons"
 )
 
 func main() {
@@ -84,4 +86,7 @@ func main() {
 	//commons.SAdd("bbb", "111111")
 
 	//fmt.Println(commons.SMembers("a"))
+	//fmt.Println(commons.SInter("a","11"))
+	//commons.SInterStore("22","a","11")
+	fmt.Println(commons.SUnion("a", "11"))
 }

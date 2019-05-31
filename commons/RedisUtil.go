@@ -345,3 +345,65 @@ func SMembers(key string) (value interface{}) {
 	}
 	return value
 }
+
+//返回一个集合的全部成员，该集合是所有给定集合的交集。
+//不存在的 key 被视为空集。
+//当给定集合当中有一个空集时，结果也为空集(根据集合运算定律)。
+func SInter(key1, key2 string) (value interface{}) {
+	value, err := redisClient.SInter(key1, key2).Result()
+	if err != nil {
+		log.Fatal("redis SInter is err, err : ", err)
+	}
+	return value
+}
+
+//这个命令类似于 SINTER key [key …] 命令，但它将结果保存到 destination 集合，而不是简单地返回结果集。
+//如果 destination 集合已经存在，则将其覆盖。
+//destination 可以是 key 本身。
+func SInterStore(destination, key1, key2 string) {
+	_, err := redisClient.SInterStore(destination, key1, key2).Result()
+	if err != nil {
+		log.Fatal("redis SInterStore is err, err : ", err)
+	}
+}
+
+//返回一个集合的全部成员，该集合是所有给定集合的并集。
+//不存在的 key 被视为空集。
+func SUnion(key1, key2 string) (value interface{}) {
+	value, err := redisClient.SUnion(key1, key2).Result()
+	if err != nil {
+		log.Fatal("redis SUnion is err, err : ", err)
+	}
+	return value
+}
+
+//这个命令类似于 SUNION key [key …] 命令，但它将结果保存到 destination 集合，而不是简单地返回结果集。
+//如果 destination 已经存在，则将其覆盖。
+//destination 可以是 key 本身。
+func SUnionStore(destination, key1, key2 string) {
+	_, err := redisClient.SUnionStore(destination, key1, key2).Result()
+	if err != nil {
+		log.Fatal("redis SUnionStore is err, err : ", err)
+	}
+}
+
+//返回一个集合的全部成员，该集合是所有给定集合之间的差集。
+//不存在的 key 被视为空集
+//例如：test1:1,2,3,4,5,6,7	test2:4,5,6,7,8,9,0		sdiff test1 test2	返回	1,2,3		sdiff test2 test1 返回8,9,0
+func SDiff(key1, key2 string) (value interface{}) {
+	value, err := redisClient.SDiff(key1, key2).Result()
+	if err != nil {
+		log.Fatal("redis SDiff is err, err : ", err)
+	}
+	return value
+}
+
+//这个命令的作用和 SDIFF key [key …] 类似，但它将结果保存到 destination 集合，而不是简单地返回结果集。
+//如果 destination 集合已经存在，则将其覆盖。
+//destination 可以是 key 本身
+func SDiffStore(destination, key1, key2 string) {
+	_, err := redisClient.SDiffStore(destination, key1, key2).Result()
+	if err != nil {
+		log.Fatal("redis SDiffStore is err, err : ", err)
+	}
+}
