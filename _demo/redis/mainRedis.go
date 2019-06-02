@@ -88,5 +88,6 @@ func main() {
 	//fmt.Println(commons.SMembers("a"))
 	//fmt.Println(commons.SInter("a","11"))
 	//commons.SInterStore("22","a","11")
-	fmt.Println(commons.SUnion("a", "11"))
+	//fmt.Println(commons.SUnion("a", "11"))
+	fmt.Println(commons.ZScore("page_rank", "google.com"))
 }

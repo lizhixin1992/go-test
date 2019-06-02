@@ -407,3 +407,88 @@ func SDiffStore(destination, key1, key2 string) {
 		log.Fatal("redis SDiffStore is err, err : ", err)
 	}
 }
+
+//将一个或多个 member 元素及其 score 值加入到有序集 key 当中。
+//如果某个 member 已经是有序集的成员，那么更新这个 member 的 score 值，并通过重新插入这个 member 元素，来保证该 member 在正确的位置上。
+//如果 key 不存在，则创建一个空的有序集并执行 ZADD 操作。
+//当 key 存在但不是有序集类型时，返回一个错误。
+func ZAdd(key string, member redis.Z) {
+	_, err := redisClient.ZAdd(key, member).Result()
+	if err != nil {
+		log.Fatal("redis ZAdd is err, err : ", err)
+	}
+}
+
+//返回有序集 key 中，成员 member 的 score 值。
+//如果 member 元素不是有序集 key 的成员，或 key 不存在，返回 nil
+func ZScore(key, member string) (value interface{}) {
+	value, err := redisClient.ZScore(key, member).Result()
+	if err != nil {
+		log.Fatal("redis ZScore is err, err : ", err)
+	}
+	return value
+}
+
+//为有序集 key 的成员 member 的 score 值加上增量 increment 。
+//可以通过传递一个负数值 increment ，让 score 减去相应的值，比如 ZINCRBY key -5 member ，就是让 member 的 score 值减去 5 。
+//当 key 不存在，或 member 不是 key 的成员时， ZINCRBY key increment member 等同于 ZADD key increment member 。
+//当 key 不是有序集类型时，返回一个错误。
+//score 值可以是整数值或双精度浮点数
+func ZIncrBy(key string, increment float64, member string) {
+	_, err := redisClient.ZIncrBy(key, increment, member).Result()
+	if err != nil {
+		log.Fatal("redis ZIncrBy is err, err : ", err)
+	}
+}
+
+//返回有序集 key 中， score 值在 min 和 max 之间(默认包括 score 值等于 min 或 max )的成员的数量
+func ZCount(key, min, max string) (value int64) {
+	value, err := redisClient.ZCount(key, min, max).Result()
+	if err != nil {
+		log.Fatal("redis ZCount is err, err : ", err)
+	}
+	return value
+}
+
+//返回有序集 key 中，指定区间内的成员。
+//其中成员的位置按 score 值递增(从小到大)来排序。
+//具有相同 score 值的成员按字典序(lexicographical order )来排列
+//下标参数 start 和 stop 都以 0 为底，也就是说，以 0 表示有序集第一个成员，以 1 表示有序集第二个成员，以此类推。 你也可以使用负数下标，以 -1 表示最后一个成员， -2 表示倒数第二个成员，以此类推
+//超出范围的下标并不会引起错误。 比如说，当 start 的值比有序集的最大下标还要大，或是 start > stop 时， ZRANGE 命令只是简单地返回一个空列表。 另一方面，假如 stop 参数的值比有序集的最大下标还要大，那么 Redis 将 stop 当作最大下标来处理
+func ZRange(key string, start, stop int64) (value interface{}) {
+	value, err := redisClient.ZRange(key, start, stop).Result()
+	if err != nil {
+		log.Fatal("redis ZRange is err, err : ", err)
+	}
+	return value
+}
+
+//和ZRange基本一样
+//通过使用 WITHSCORES 选项，来让成员和它的 score 值一并返回，返回列表以 value1,score1, ..., valueN,scoreN 的格式表示
+func ZRangeWithScores(key string, start, stop int64) (value interface{}) {
+	value, err := redisClient.ZRangeWithScores(key, start, stop).Result()
+	if err != nil {
+		log.Fatal("redis ZRangeWithScores is err, err : ", err)
+	}
+	return value
+}
+
+//返回有序集 key 中，指定区间内的成员。
+//其中成员的位置按 score 值递减(从大到小)来排列。 具有相同 score 值的成员按字典序的逆序(reverse lexicographical order)排列
+func ZRevRange(key string, start, stop int64) (value interface{}) {
+	value, err := redisClient.ZRevRange(key, start, stop).Result()
+	if err != nil {
+		log.Fatal("redis ZRevRange is err, err : ", err)
+	}
+	return value
+}
+
+//和ZRevRange基本一样
+//通过使用 WITHSCORES 选项，来让成员和它的 score 值一并返回，返回列表以 value1,score1, ..., valueN,scoreN 的格式表示
+func ZRevRangeWithScores(key string, start, stop int64) (value interface{}) {
+	value, err := redisClient.ZRevRangeWithScores(key, start, stop).Result()
+	if err != nil {
+		log.Fatal("redis ZRevRangeWithScores is err, err : ", err)
+	}
+	return value
+}
