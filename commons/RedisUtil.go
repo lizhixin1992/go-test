@@ -492,3 +492,26 @@ func ZRevRangeWithScores(key string, start, stop int64) (value interface{}) {
 	}
 	return value
 }
+
+//返回有序集 key 中，所有 score 值介于 min 和 max 之间(包括等于 min 或 max )的成员。有序集成员按 score 值递增(从小到大)次序排列。
+//具有相同 score 值的成员按字典序(lexicographical order)来排列(该属性是有序集提供的，不需要额外的计算)。
+//可选的 LIMIT 参数指定返回结果的数量及区间(就像SQL中的 SELECT LIMIT offset, count )，注意当 offset 很大时，定位 offset 的操作可能需要遍历整个有序集，此过程最坏复杂度为 O(N) 时间
+//min 和 max 可以是 -inf 和 +inf ，这样一来，你就可以在不知道有序集的最低和最高 score 值的情况
+//默认情况下，区间的取值使用闭区间 (小于等于或大于等于)，你也可以通过给参数前增加 ( 符号来使用可选的开区间 (小于或大于)
+func ZRangeByScore(key string, opt redis.ZRangeBy) (value interface{}) {
+	value, err := redisClient.ZRangeByScore(key, opt).Result()
+	if err != nil {
+		log.Fatal("redis ZRangeByScore is err, err : ", err)
+	}
+	return value
+}
+
+//和ZRangeByScore基本一样
+//通过使用 WITHSCORES 选项，来让成员和它的 score 值一并返回，返回列表以 value1,score1, ..., valueN,scoreN 的格式表示
+func ZRangeByScoreWithScores(key string, opt redis.ZRangeBy) (value interface{}) {
+	value, err := redisClient.ZRangeByScoreWithScores(key, opt).Result()
+	if err != nil {
+		log.Fatal("redis ZRangeByScoreWithScores is err, err : ", err)
+	}
+	return value
+}
