@@ -546,9 +546,59 @@ func ZRemRangeByRank(key string, start, stop int64) {
 	}
 }
 
+//移除有序集 key 中，所有 score 值介于 min 和 max 之间(包括等于 min 或 max )的成员
 func ZRemRangeByScore(key, min, max string) {
 	_, err := redisClient.ZRemRangeByScore(key, min, max).Result()
 	if err != nil {
 		log.Fatal("redis ZRemRangeByScore is err, err : ", err)
+	}
+}
+
+//当有序集合的所有成员都具有相同的分值时， 有序集合的元素会根据成员的字典序（lexicographical ordering）来进行排序， 而这个命令则可以返回给定的有序集合键 key 中， 值介于 min 和 max 之间的成员
+//如果有序集合里面的成员带有不同的分值， 那么命令返回的结果是未指定的（unspecified）。
+//命令会使用 C 语言的 memcmp() 函数， 对集合中的每个成员进行逐个字节的对比（byte-by-byte compare）， 并按照从低到高的顺序， 返回排序后的集合成员。 如果两个字符串有一部分内容是相同的话， 那么命令会认为较长的字符串比较短的字符串要大。
+//可选的 LIMIT offset count 参数用于获取指定范围内的匹配元素 （就像 SQL 中的 SELECT LIMIT offset count 语句）。 需要注意的一点是， 如果 offset 参数的值非常大的话， 那么命令在返回结果之前， 需要先遍历至 offset 所指定的位置， 这个操作会为命令加上最多 O(N) 复杂度
+//合法的 min 和 max 参数必须包含 ( 或者 [ ， 其中 ( 表示开区间（指定的值不会被包含在范围之内）， 而 [ 则表示闭区间（指定的值会被包含在范围之内）。
+//特殊值 + 和 - 在 min 参数以及 max 参数中具有特殊的意义， 其中 + 表示正无限， 而 - 表示负无限。 因此， 向一个所有成员的分值都相同的有序集合发送命令 ZRANGEBYLEX <zset> - + ， 命令将返回有序集合中的所有元素
+func ZRangeByLex(key string, opt redis.ZRangeBy) (value interface{}) {
+	value, err := redisClient.ZRangeByLex(key, opt).Result()
+	if err != nil {
+		log.Fatal("redis ZRangeByLex is err, err : ", err)
+	}
+	return value
+}
+
+//将任意数量的元素添加到指定的 HyperLogLog 里面。
+//作为这个命令的副作用， HyperLogLog 内部可能会被更新， 以便反映一个不同的唯一元素估计数量（也即是集合的基数）。
+//如果 HyperLogLog 估计的近似基数（approximated cardinality）在命令执行之后出现了变化， 那么命令返回 1 ， 否则返回 0 。 如果命令执行时给定的键不存在， 那么程序将先创建一个空的 HyperLogLog 结构， 然后再执行命令。
+//调用 PFADD key element [element …] 命令时可以只给定键名而不给定元素：
+//如果给定键已经是一个 HyperLogLog ， 那么这种调用不会产生任何效果；
+//但如果给定的键不存在， 那么命令会创建一个空的 HyperLogLog ， 并向客户端返回 1
+func PFAdd(key string, els ...interface{}) {
+	_, err := redisClient.PFAdd(key, els).Result()
+	if err != nil {
+		log.Fatal("redis PFAdd is err, err : ", err)
+	}
+}
+
+//当 PFCOUNT key [key …] 命令作用于单个键时， 返回储存在给定键的 HyperLogLog 的近似基数， 如果键不存在， 那么返回 0 。
+//当 PFCOUNT key [key …] 命令作用于多个键时， 返回所有给定 HyperLogLog 的并集的近似基数， 这个近似基数是通过将所有给定 HyperLogLog 合并至一个临时 HyperLogLog 来计算得出的。
+//通过 HyperLogLog 数据结构， 用户可以使用少量固定大小的内存， 来储存集合中的唯一元素 （每个 HyperLogLog 只需使用 12k 字节内存，以及几个字节的内存来储存键本身）。
+//命令返回的可见集合（observed set）基数并不是精确值， 而是一个带有 0.81% 标准错误（standard error）的近似值。
+//举个例子， 为了记录一天会执行多少次各不相同的搜索查询， 一个程序可以在每次执行搜索查询时调用一次 PFADD key element [element …] ， 并通过调用 PFCOUNT key [key …] 命令来获取这个记录的近似结果
+func PFCount(key string) (value int64) {
+	value, err := redisClient.PFCount(key).Result()
+	if err != nil {
+		log.Fatal("redis PFCount is err, err : ", err)
+	}
+	return value
+}
+
+//将多个 HyperLogLog 合并（merge）为一个 HyperLogLog ， 合并后的 HyperLogLog 的基数接近于所有输入 HyperLogLog 的可见集合（observed set）的并集。
+//合并得出的 HyperLogLog 会被储存在 destkey 键里面， 如果该键并不存在， 那么命令在执行之前， 会先为该键创建一个空的 HyperLogLog
+func PFMerge(dest string, keys string) {
+	_, err := redisClient.PFMerge(dest, keys).Result()
+	if err != nil {
+		log.Fatal("redis PFMerge is err, err : ", err)
 	}
 }
