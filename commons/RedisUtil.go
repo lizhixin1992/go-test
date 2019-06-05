@@ -515,3 +515,40 @@ func ZRangeByScoreWithScores(key string, opt redis.ZRangeBy) (value interface{})
 	}
 	return value
 }
+
+//和ZRangeByScore类似
+//返回有序集 key 中， score 值介于 max 和 min 之间(默认包括等于 max 或 min )的所有的成员。有序集成员按 score 值递减(从大到小)的次序排列。
+//具有相同 score 值的成员按字典序的逆序(reverse lexicographical order )排列
+func ZRevRangeByScore(key string, opt redis.ZRangeBy) (value interface{}) {
+	value, err := redisClient.ZRevRangeByScore(key, opt).Result()
+	if err != nil {
+		log.Fatal("redis ZRevRangeByScore is err, err : ", err)
+	}
+	return value
+}
+
+//移除有序集 key 中的一个或多个成员，不存在的成员将被忽略。
+//当 key 存在但不是有序集类型时，返回一个错误
+func ZRem(key string, members ...interface{}) {
+	_, err := redisClient.ZRem(key, members).Result()
+	if err != nil {
+		log.Fatal("redis ZRem is err, err : ", err)
+	}
+}
+
+//移除有序集 key 中，指定排名(rank)区间内的所有成员。
+//区间分别以下标参数 start 和 stop 指出，包含 start 和 stop 在内。
+//下标参数 start 和 stop 都以 0 为底，也就是说，以 0 表示有序集第一个成员，以 1 表示有序集第二个成员，以此类推。 你也可以使用负数下标，以 -1 表示最后一个成员， -2 表示倒数第二个成员，以此类推
+func ZRemRangeByRank(key string, start, stop int64) {
+	_, err := redisClient.ZRemRangeByRank(key, start, stop).Result()
+	if err != nil {
+		log.Fatal("redis ZRemRangeByRank is err, err : ", err)
+	}
+}
+
+func ZRemRangeByScore(key, min, max string) {
+	_, err := redisClient.ZRemRangeByScore(key, min, max).Result()
+	if err != nil {
+		log.Fatal("redis ZRemRangeByScore is err, err : ", err)
+	}
+}
