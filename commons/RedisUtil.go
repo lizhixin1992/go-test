@@ -602,3 +602,96 @@ func PFMerge(dest string, keys string) {
 		log.Fatal("redis PFMerge is err, err : ", err)
 	}
 }
+
+//检查给定 key 是否存在
+//若 key 存在，返回 1 ，否则返回 0
+func Exists(key string) (value bool) {
+	flag, err := redisClient.Exists(key).Result()
+	if err != nil {
+		log.Fatal("redis Exists is err, err : ", err)
+	} else {
+		if flag == 1 {
+			value = true
+		} else {
+			value = false
+		}
+	}
+	return value
+}
+
+//返回 key 所储存的值的类型
+//none (key不存在)
+//string (字符串)
+//list (列表)
+//set (集合)
+//zset (有序集)
+//hash (哈希表)
+//stream （流）
+func Type(key string) (value string) {
+	value, err := redisClient.Type(key).Result()
+	if err != nil {
+		log.Fatal("redis Type is err, err : ", err)
+	}
+	return value
+}
+
+//将 key 改名为 newkey 。
+//当 key 和 newkey 相同，或者 key 不存在时，返回一个错误。
+//当 newkey 已经存在时， RENAME 命令将覆盖旧值
+func Rename(key, newkey string) {
+	_, err := redisClient.Rename(key, newkey).Result()
+	if err != nil {
+		log.Fatal("redis Rename is err, err : ", err)
+	}
+}
+
+//当且仅当 newkey 不存在时，将 key 改名为 newkey 。
+//当 key 不存在时，返回一个错误
+//修改成功时，返回 true ； 如果 newkey 已经存在，返回 false
+func RenameNX(key, newkey string) (value bool) {
+	value, err := redisClient.RenameNX(key, newkey).Result()
+	if err != nil {
+		log.Fatal("redis RenameNX is err, err : ", err)
+	}
+	return value
+}
+
+//将当前数据库的 key 移动到给定的数据库 db 当中。
+//如果当前数据库(源数据库)和给定数据库(目标数据库)有相同名字的给定 key ，或者 key 不存在于当前数据库，那么 MOVE 没有任何效果。
+//因此，也可以利用这一特性，将 MOVE 当作锁(locking)原语(primitive)
+//移动成功返回 true ，失败则返回 false
+func Move(key string, db int64) (value bool) {
+	value, err := redisClient.Move(key, db).Result()
+	if err != nil {
+		log.Fatal("redis Move is err, err : ", err)
+	}
+	return value
+}
+
+//删除给定的一个或多个 key 。
+//不存在的 key 会被忽略
+func Del(key string) {
+	_, err := redisClient.Del(key).Result()
+	if err != nil {
+		log.Fatal("redis Del is err, err : ", err)
+	}
+}
+
+//从当前数据库中随机返回(不删除)一个 key
+//当数据库不为空时，返回一个 key 。 当数据库为空时，返回 nil
+func RandomKey() (value string) {
+	value, err := redisClient.RandomKey().Result()
+	if err != nil {
+		log.Fatal("redis RandomKey is err, err : ", err)
+	}
+	return value
+}
+
+//返回当前数据库的 key 的数量
+func DBSize() (value int64) {
+	value, err := redisClient.DBSize().Result()
+	if err != nil {
+		log.Fatal("redis DBSize is err, err : ", err)
+	}
+	return value
+}
