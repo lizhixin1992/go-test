@@ -711,3 +711,47 @@ func Keys(pattern string) (value []string) {
 	}
 	return value
 }
+
+//SCAN 命令是一个基于游标的迭代器（cursor based iterator）： SCAN 命令每次被调用之后， 都会向用户返回一个新的游标， 用户在下次迭代时需要使用这个新游标作为 SCAN 命令的游标参数， 以此来延续之前的迭代过程。
+//当 SCAN 命令的游标参数被设置为 0 时， 服务器将开始一次新的迭代， 而当服务器向用户返回值为 0 的游标时， 表示迭代已结束
+//SCAN 命令， 以及其他增量式迭代命令， 在进行完整遍历的情况下可以为用户带来以下保证： 从完整遍历开始直到完整遍历结束期间， 一直存在于数据集内的所有元素都会被完整遍历返回； 这意味着， 如果有一个元素， 它从遍历开始直到遍历结束期间都存在于被遍历的数据集当中， 那么 SCAN 命令总会在某次迭代中将这个元素返回给用户。
+//然而因为增量式命令仅仅使用游标来记录迭代状态， 所以这些命令带有以下缺点：
+//同一个元素可能会被返回多次。 处理重复元素的工作交由应用程序负责， 比如说， 可以考虑将迭代返回的元素仅仅用于可以安全地重复执行多次的操作上。
+//如果一个元素是在迭代过程中被添加到数据集的， 又或者是在迭代过程中从数据集中被删除的， 那么这个元素可能会被返回， 也可能不会， 这是未定义的（undefined）
+
+//COUNT 选项的作用就是让用户告知迭代命令， 在每次迭代中应该从数据集里返回多少元素
+//MATCH	和 KEYS 命令一样， 增量式迭代命令也可以通过提供一个 glob 风格的模式参数， 让命令只返回和给定模式相匹配的元素
+func Scan(cursor uint64, match string, count int64) (keys []string, value uint64) {
+	keys, value, err := redisClient.Scan(cursor, match, count).Result()
+	if err != nil {
+		log.Fatal("redis Scan is err, err : ", err)
+	}
+	return keys, value
+}
+
+//用于迭代集合键中的元素
+func SScan(key string, cursor uint64, match string, count int64) (keys []string, value uint64) {
+	keys, value, err := redisClient.SScan(key, cursor, match, count).Result()
+	if err != nil {
+		log.Fatal("redis SScan is err, err : ", err)
+	}
+	return keys, value
+}
+
+//用于迭代哈希键中的键值对
+func HScan(key string, cursor uint64, match string, count int64) (keys []string, value uint64) {
+	keys, value, err := redisClient.HScan(key, cursor, match, count).Result()
+	if err != nil {
+		log.Fatal("redis HScan is err, err : ", err)
+	}
+	return keys, value
+}
+
+//用于迭代哈希键中的键值对
+func ZScan(key string, cursor uint64, match string, count int64) (keys []string, value uint64) {
+	keys, value, err := redisClient.ZScan(key, cursor, match, count).Result()
+	if err != nil {
+		log.Fatal("redis ZScan is err, err : ", err)
+	}
+	return keys, value
+}

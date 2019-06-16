@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/go-redis/redis"
 	"github.com/lizhixin1992/test/commons"
 )
@@ -89,5 +90,11 @@ func main() {
 	//commons.SInterStore("22","a","11")
 	//fmt.Println(commons.SUnion("a", "11"))
 	//fmt.Println(commons.ZScore("page_rank", "google.com"))
-	commons.RenameNX("12121", "test1")
+	//commons.RenameNX("12121", "test1")
+
+	//keys, cu :=commons.Scan(0,"",10)
+	//fmt.Println(keys,cu)
+
+	keys, cu := commons.SScan("11", 0, "", 10)
+	fmt.Println(keys, cu)
 }
