@@ -755,3 +755,106 @@ func ZScan(key string, cursor uint64, match string, count int64) (keys []string,
 	}
 	return keys, value
 }
+
+//返回或保存给定列表、集合、有序集合 key 中经过排序的元素。
+//排序默认以数字作为对象，值被解释为双精度浮点数，然后进行比较
+//因为 SORT 命令默认排序对象为数字， 当需要对字符串进行排序时， 需要显式地在 SORT 命令之后添加 ALPHA 修饰符
+func Sort(key string, sort *redis.Sort) (value []string) {
+	value, err := redisClient.Sort(key, sort).Result()
+	if err != nil {
+		log.Fatal("redis Sort is err, err : ", err)
+	}
+	return value
+}
+
+//清空当前数据库中的所有 key。
+//此命令从不失败
+//总是返回 OK
+func FlushDB() {
+	_, err := redisClient.FlushDB().Result()
+	if err != nil {
+		log.Fatal("redis FlushDB is err, err : ", err)
+	}
+}
+
+//清空当前数据库中的所有 key。
+//此命令从不失败
+//总是返回 OK
+func FlushDBAsync() {
+	_, err := redisClient.FlushDBAsync().Result()
+	if err != nil {
+		log.Fatal("redis FlushDBAsync is err, err : ", err)
+	}
+}
+
+//清空整个 Redis 服务器的数据(删除所有数据库的所有 key )。
+//此命令从不失败
+//总是返回 OK
+func FlushAll() {
+	_, err := redisClient.FlushAll().Result()
+	if err != nil {
+		log.Fatal("redis FlushAll is err, err : ", err)
+	}
+}
+
+//清空整个 Redis 服务器的数据(删除所有数据库的所有 key )。
+//此命令从不失败
+//总是返回 OK
+func FlushAllAsync() {
+	_, err := redisClient.FlushAllAsync().Result()
+	if err != nil {
+		log.Fatal("redis FlushAllAsync is err, err : ", err)
+	}
+}
+
+//为给定 key 设置生存时间，当 key 过期时(生存时间为 0 )，它会被自动删除。
+//在 Redis 中，带有生存时间的 key 被称为『易失的』(volatile)。
+//生存时间可以通过使用 DEL 命令来删除整个 key 来移除，或者被 SET 和 GETSET 命令覆写(overwrite)，这意味着，如果一个命令只是修改(alter)一个带生存时间的 key 的值而不是用一个新的 key 值来代替(replace)它的话，那么生存时间不会被改变。
+//比如说，对一个 key 执行 INCR 命令，对一个列表进行 LPUSH 命令，或者对一个哈希表执行 HSET 命令，这类操作都不会修改 key 本身的生存时间。
+//另一方面，如果使用 RENAME 对一个 key 进行改名，那么改名后的 key 的生存时间和改名前一样。
+//RENAME 命令的另一种可能是，尝试将一个带生存时间的 key 改名成另一个带生存时间的 another_key ，这时旧的 another_key (以及它的生存时间)会被删除，然后旧的 key 会改名为 another_key ，因此，新的 another_key 的生存时间也和原本的 key 一样。
+//使用 PERSIST 命令可以在不删除 key 的情况下，移除 key 的生存时间，让 key 重新成为一个『持久的』(persistent) key
+func Expire(key string, expiration time.Duration) {
+	bool, err := redisClient.Expire(key, expiration).Result()
+	if !bool {
+		log.Fatal("redis Expire is err, err : , bool : ", err, bool)
+	}
+}
+
+//EXPIREAT 的作用和 EXPIRE 类似，都用于为 key 设置生存时间。
+//不同在于 EXPIREAT 命令接受的时间参数是 UNIX 时间戳(unix timestamp)
+func ExpireAt(key string, tm time.Time) {
+	bool, err := redisClient.ExpireAt(key, tm).Result()
+	if !bool {
+		log.Fatal("redis ExpireAt is err, err : , bool : ", err, bool)
+	}
+}
+
+//以秒为单位，返回给定 key 的剩余生存时间(TTL, time to live)
+//当 key 不存在时，返回 -2 。 当 key 存在但没有设置剩余生存时间时，返回 -1 。 否则，以秒为单位，返回 key 的剩余生存时间
+func TTL(key string) (value time.Duration) {
+	value, err := redisClient.TTL(key).Result()
+	if err != nil {
+		log.Fatal("redis TTL is err, err : ", err)
+	}
+	return value
+}
+
+//SAVE 命令执行一个同步保存操作，将当前 Redis 实例的所有数据快照(snapshot)以 RDB 文件的形式保存到硬盘。
+//一般来说，在生产环境很少执行 SAVE 操作，因为它会阻塞所有客户端，保存数据库的任务通常由 BGSAVE 命令异步地执行。然而，如果负责保存数据的后台子进程不幸出现问题时， SAVE 可以作为保存数据的最后手段来使用。
+func Save() {
+	_, err := redisClient.Save().Result()
+	if err != nil {
+		log.Fatal("redis Save is err, err : ", err)
+	}
+}
+
+//在后台异步(Asynchronously)保存当前数据库的数据到磁盘。
+//BGSAVE 命令执行之后立即返回 OK ，然后 Redis fork 出一个新子进程，原来的 Redis 进程(父进程)继续处理客户端请求，而子进程则负责将数据保存到磁盘，然后退出。
+//客户端可以通过 LASTSAVE 命令查看相关信息，判断 BGSAVE 命令是否执行成功
+func BgSave() {
+	_, err := redisClient.BgSave().Result()
+	if err != nil {
+		log.Fatal("redis BgSave is err, err : ", err)
+	}
+}

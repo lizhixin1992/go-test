@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/go-redis/redis"
-	"github.com/lizhixin1992/test/commons"
 )
 
 func main() {
@@ -95,6 +93,9 @@ func main() {
 	//keys, cu :=commons.Scan(0,"",10)
 	//fmt.Println(keys,cu)
 
-	keys, cu := commons.SScan("11", 0, "", 10)
-	fmt.Println(keys, cu)
+	//keys, cu := commons.SScan("11", 0, "", 10)
+	//fmt.Println(keys, cu)
+
+	//commons.Expire("key",20000 * time.Second)
+
 }
