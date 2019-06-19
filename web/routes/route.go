@@ -7,7 +7,7 @@ import (
 	"github.com/lizhixin1992/test/web/controller"
 )
 
-func Configure(b *bootstrap.Bootstrapper)  {
+func Configure(b *bootstrap.Bootstrapper) {
 	userService := services.NewUserservice()
 
 	userRoute := mvc.New(b.Party("/"))
