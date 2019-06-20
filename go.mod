@@ -31,5 +31,5 @@ require (
 	github.com/ryanuber/columnize v2.1.0+incompatible // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	golang.org/x/crypto v0.0.0-20190418165655-df01cb2cc480 // indirect
-	github.com/olivere/elastic/v7
+    github.com/olivere/elastic/v7
 )
