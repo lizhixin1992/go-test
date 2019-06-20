@@ -4,4 +4,7 @@
   #Passwor = ""
   DB = 0
 
+[elastic]
+  Urls = "http://127.0.0.1:9200"
+
 
