@@ -16,20 +16,18 @@ type UserController struct {
 	Service services.UserService
 }
 
+////测试es返回数据格式
+//func (c *UserController) Get() mvc.Result {
+//	query := elastic.NewMatchQuery("passage", "elk rocks")
+//	result := commons.MatchQuery("book1", "english", query, 0, 10)
+//
+//	return setResponseSuccessData(result)
+//}
+
 //localhost:8080/
 func (c *UserController) Get() mvc.Result {
 	dataList := c.Service.GetAll()
-	return mvc.Response{
-		Object: iris.Map{
-			"errorCode":    "0",
-			"errorMessage": "success",
-			"data":         dataList,
-		},
-	}
-
-	//return mvc.Response{
-	//	Text:"11111111",
-	//}
+	return setResponseSuccessData(dataList)
 }
 
 //localhost:8080/{id}
@@ -37,7 +35,7 @@ func (c *UserController) GetBy(id int) mvc.Result {
 	data := c.Service.GetById(id)
 	return mvc.Response{
 		Object: iris.Map{
-			"errorCode":    "0",
+			"errorCode":    0,
 			"errorMessage": "success",
 			"data":         data,
 		},
@@ -60,10 +58,30 @@ func (c *UserController) PostSave() mvc.Result {
 	}
 }
 
+func setResponse(code int, msg string, data interface{}) mvc.Response {
+	return mvc.Response{
+		Object: iris.Map{
+			"errorCode":    code,
+			"errorMessage": msg,
+			"data":         data,
+		},
+	}
+}
+
+func setResponseSuccessData(data interface{}) mvc.Response {
+	return mvc.Response{
+		Object: iris.Map{
+			"errorCode":    0,
+			"errorMessage": "success",
+			"data":         data,
+		},
+	}
+}
+
 func setResponseSuccess() mvc.Response {
 	return mvc.Response{
 		Object: iris.Map{
-			"errorCode":    "0",
+			"errorCode":    0,
 			"errorMessage": "success",
 		},
 	}
@@ -72,7 +90,7 @@ func setResponseSuccess() mvc.Response {
 func setResponseFail() mvc.Response {
 	return mvc.Response{
 		Object: iris.Map{
-			"errorCode":    "-1",
+			"errorCode":    1,
 			"errorMessage": "fail",
 		},
 	}
@@ -80,7 +98,7 @@ func setResponseFail() mvc.Response {
 
 func (c *UserController) BeforeActivation(b mvc.BeforeActivation) {
 	fmt.Println("******************* before *********************")
-	fmt.Println("Cache", "****************", commons.Cache.Get("test1"))
+	//fmt.Println("Cache", "****************", commons.Cache.Get("test1"))
 	fmt.Println("CacheCluster", "****************", commons.CacheCluster.Get("test"))
 
 	cp := commons.CachePool.Get()
