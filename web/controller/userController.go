@@ -21,25 +21,19 @@ type UserController struct {
 //	query := elastic.NewMatchQuery("passage", "elk rocks")
 //	result := commons.MatchQuery("book1", "english", query, 0, 10)
 //
-//	return setResponseSuccessData(result)
+//	return commons.SetResponseSuccessData(result)
 //}
 
 //localhost:8080/
 func (c *UserController) Get() mvc.Result {
 	dataList := c.Service.GetAll()
-	return setResponseSuccessData(dataList)
+	return commons.SetResponseSuccessData(dataList)
 }
 
 //localhost:8080/{id}
 func (c *UserController) GetBy(id int) mvc.Result {
 	data := c.Service.GetById(id)
-	return mvc.Response{
-		Object: iris.Map{
-			"errorCode":    0,
-			"errorMessage": "success",
-			"data":         data,
-		},
-	}
+	return commons.SetResponseSuccessData(data)
 }
 
 //localhost:8080/save
@@ -48,51 +42,13 @@ func (c *UserController) PostSave() mvc.Result {
 	err := c.Ctx.ReadJSON(&info)
 	if err != nil {
 		log.Fatal(err)
-		return setResponseFail()
+		return commons.SetResponseFail()
 	} else {
 		date := int(commons.GetNowUnix())
 		info.CreateTime = date
 		info.UpdateTime = date
 		c.Service.Save(&info)
-		return setResponseSuccess()
-	}
-}
-
-func setResponse(code int, msg string, data interface{}) mvc.Response {
-	return mvc.Response{
-		Object: iris.Map{
-			"errorCode":    code,
-			"errorMessage": msg,
-			"data":         data,
-		},
-	}
-}
-
-func setResponseSuccessData(data interface{}) mvc.Response {
-	return mvc.Response{
-		Object: iris.Map{
-			"errorCode":    0,
-			"errorMessage": "success",
-			"data":         data,
-		},
-	}
-}
-
-func setResponseSuccess() mvc.Response {
-	return mvc.Response{
-		Object: iris.Map{
-			"errorCode":    0,
-			"errorMessage": "success",
-		},
-	}
-}
-
-func setResponseFail() mvc.Response {
-	return mvc.Response{
-		Object: iris.Map{
-			"errorCode":    1,
-			"errorMessage": "fail",
-		},
+		return commons.SetResponseSuccess()
 	}
 }
 
