@@ -8,7 +8,16 @@ import (
 
 func main() {
 	query := elastic.NewMatchQuery("passage", "elk rocks")
-	result := commons.MatchQuery("book1", "english", query, 0, 10)
+	searchBuild := commons.SearchBuild{
+		From:               0,
+		Size:               10,
+		Query:              query,
+		Index:              "book1",
+		Typ:                "english",
+		FetchSourceContext: elastic.NewFetchSourceContext(true).Include("passage"),
+	}
+
+	result := commons.MatchQuery(searchBuild)
 
 	for _, value := range result {
 		fmt.Println(value)

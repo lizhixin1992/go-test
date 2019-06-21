@@ -3,7 +3,6 @@ package commons
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/lizhixin1992/test/conf"
 	"github.com/olivere/elastic"
 	"github.com/pelletier/go-toml"
@@ -12,6 +11,19 @@ import (
 var es = NewElastic()
 
 var ctx = context.Background()
+
+type SearchBuild struct {
+	Index              string                      `json:"index"`
+	Typ                string                      `json:"typ"`
+	Query              elastic.Query               `json:"query"`
+	From               int                         `json:"from"`
+	Size               int                         `json:"size"`
+	FetchSourceContext *elastic.FetchSourceContext `json:"fetch_source_context"`
+	SortInfo           *elastic.SortInfo           `json:"sort_info"`
+	AggregationName    string                      `json:"aggregation_name"`
+	Aggregation        elastic.Aggregation         `json:"aggregation"`
+	Highlight          *elastic.Highlight          `json:"highlight"`
+}
 
 func NewElastic() *elastic.Client {
 	tree := conf.GlobalConf.Get("elastic").(*toml.Tree)
@@ -22,17 +34,50 @@ func NewElastic() *elastic.Client {
 	return es
 }
 
-//
+//设置查询相关
+func setSearchService(build SearchBuild) *elastic.SearchService {
+	searchService := es.Search()
+	if build.Index != "" {
+		searchService.Index(build.Index)
+	}
+	if build.Typ != "" {
+		searchService.Type(build.Typ)
+	}
+	if build.Query != nil {
+		searchService.Query(build.Query)
+	}
+	if build.From >= 0 {
+		searchService.From(build.From)
+	}
+	if build.Size >= 0 {
+		searchService.Size(build.Size)
+	}
+	if build.FetchSourceContext != nil {
+		searchService.FetchSourceContext(build.FetchSourceContext)
+	}
+	if build.SortInfo != nil {
+		searchService.SortWithInfo(*build.SortInfo)
+	}
+	if build.AggregationName != "" && build.Aggregation != nil {
+		searchService.Aggregation(build.AggregationName, build.Aggregation)
+	}
+	if build.Highlight != nil {
+		searchService.Highlight(build.Highlight)
+	}
+	searchService.Pretty(true)
+
+	return searchService
+}
+
+//转换返回数据
 func setReturnValue(result *elastic.SearchHits) (list []interface{}) {
-	if result != nil {
+	if result != nil && result.TotalHits > 0 {
 		list = make([]interface{}, len(result.Hits))
 		len := 0
 		for _, hit := range result.Hits {
 			var b interface{}
 			err := json.Unmarshal(*hit.Source, &b)
-			if err != nil {
-				// Deserialization failed
-			} else {
+			if err == nil {
 				list[len] = b
 				len++
 			}
@@ -42,16 +87,10 @@ func setReturnValue(result *elastic.SearchHits) (list []interface{}) {
 }
 
 //match查询
-func MatchQuery(index, typ string, query elastic.Query, from, size int) (list []interface{}) {
-	searchResult, err := es.Search().Index(index).Type(typ).Query(query).From(from).Size(size).Pretty(true).Do(ctx)
+func MatchQuery(build SearchBuild) (list []interface{}) {
+	searchResult, err := setSearchService(build).Do(ctx)
 	if err != nil {
 		panic(err)
 	}
-
-	if searchResult.Hits.TotalHits > 0 {
-		return setReturnValue(searchResult.Hits)
-	} else {
-		fmt.Print("Found no total\n")
-		return nil
-	}
+	return setReturnValue(searchResult.Hits)
 }
