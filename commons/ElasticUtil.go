@@ -69,16 +69,16 @@ func setSearchService(build SearchBuild) *elastic.SearchService {
 	return searchService
 }
 
-//转换返回数据
+//转换返回数据-list
 func setReturnValue(result *elastic.SearchHits) (list []interface{}) {
 	if result != nil && result.TotalHits > 0 {
 		list = make([]interface{}, len(result.Hits))
 		len := 0
 		for _, hit := range result.Hits {
-			var b interface{}
-			err := json.Unmarshal(*hit.Source, &b)
+			var data interface{}
+			err := json.Unmarshal(*hit.Source, &data)
 			if err == nil {
-				list[len] = b
+				list[len] = data
 				len++
 			}
 		}
