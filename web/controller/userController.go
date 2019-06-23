@@ -27,7 +27,7 @@ type UserController struct {
 //		Typ:                "english",
 //		FetchSourceContext: elastic.NewFetchSourceContext(true).Include("passage"),
 //	}
-//	result := commons.MatchQuery(searchBuild)
+//	result := commons.Query(searchBuild)
 //
 //	return commons.SetResponseSuccessData(result)
 //}

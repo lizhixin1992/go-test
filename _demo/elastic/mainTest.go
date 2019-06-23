@@ -17,7 +17,7 @@ func main() {
 		FetchSourceContext: elastic.NewFetchSourceContext(true).Include("passage"),
 	}
 
-	result := commons.MatchQuery(searchBuild)
+	result := commons.Query(searchBuild)
 
 	for _, value := range result {
 		fmt.Println(value)
@@ -25,5 +25,8 @@ func main() {
 	ret := commons.SetResponseSuccessData(result)
 	fmt.Println(ret)
 	fmt.Println(commons.SetResponseSuccess())
+
+	boolQuery := elastic.NewBoolQuery()
+	boolQuery.Filter()
 
 }

@@ -86,8 +86,8 @@ func setReturnValue(result *elastic.SearchHits) (list []interface{}) {
 	return list
 }
 
-//match查询
-func MatchQuery(build SearchBuild) (list []interface{}) {
+//查询
+func Query(build SearchBuild) (list []interface{}) {
 	searchResult, err := setSearchService(build).Do(ctx)
 	if err != nil {
 		panic(err)
