@@ -3,8 +3,8 @@ package dao
 import (
 	"fmt"
 	"github.com/go-xorm/xorm"
-	"github.com/lizhixin1992/test/models"
-	"github.com/lizhixin1992/test/models/conditions"
+	"github.com/lizhixin1992/go-test/models"
+	"github.com/lizhixin1992/go-test/models/conditions"
 	"strconv"
 )
 

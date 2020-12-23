@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/lizhixin1992/test/bootstrap"
-	"github.com/lizhixin1992/test/web/routes"
+	"github.com/lizhixin1992/go-test/bootstrap"
+	"github.com/lizhixin1992/go-test/web/routes"
 )
 
 func newApp() (b *bootstrap.Bootstrapper) {

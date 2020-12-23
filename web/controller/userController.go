@@ -3,11 +3,11 @@ package controller
 import (
 	"fmt"
 	"github.com/gomodule/redigo/redis"
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
-	"github.com/lizhixin1992/test/commons"
-	"github.com/lizhixin1992/test/models"
-	"github.com/lizhixin1992/test/services"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
+	"github.com/lizhixin1992/go-test/commons"
+	"github.com/lizhixin1992/go-test/models"
+	"github.com/lizhixin1992/go-test/services"
 	"log"
 )
 

@@ -2,11 +2,11 @@ package bootstrap
 
 import (
 	"github.com/gorilla/securecookie"
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/middleware/logger"
-	"github.com/kataras/iris/middleware/recover"
-	"github.com/kataras/iris/sessions"
-	"github.com/lizhixin1992/test/conf"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/middleware/logger"
+	"github.com/kataras/iris/v12/middleware/recover"
+	"github.com/kataras/iris/v12/sessions"
+	"github.com/lizhixin1992/go-test/conf"
 	"time"
 )
 
@@ -85,7 +85,7 @@ func (b *Bootstrapper) Configure(cs ...Configurator) {
 	}
 }
 
-//初始化相关
+//初始化相关y
 func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 	b.SetUpViews()
 	b.SetUpSession(conf.SessionExpires,
@@ -96,7 +96,7 @@ func (b *Bootstrapper) Bootstrap() *Bootstrapper {
 
 	// static files
 	b.Favicon(conf.StaticAssets + conf.Favicon)
-	b.StaticWeb(conf.StaticAssets[1:len(conf.StaticAssets)-1], conf.StaticAssets)
+	b.HandleDir(conf.StaticAssets[1:len(conf.StaticAssets)-1], conf.StaticAssets)
 
 	// middleware, after static files
 	b.Use(recover.New())

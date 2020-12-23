@@ -2,7 +2,7 @@ package commons
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/lizhixin1992/test/conf"
+	"github.com/lizhixin1992/go-test/conf"
 	"github.com/pelletier/go-toml"
 	"log"
 	"time"

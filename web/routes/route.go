@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"github.com/kataras/iris/mvc"
-	"github.com/lizhixin1992/test/bootstrap"
-	"github.com/lizhixin1992/test/services"
-	"github.com/lizhixin1992/test/web/controller"
+	"github.com/kataras/iris/v12/mvc"
+	"github.com/lizhixin1992/go-test/bootstrap"
+	"github.com/lizhixin1992/go-test/services"
+	"github.com/lizhixin1992/go-test/web/controller"
 )
 
 func Configure(b *bootstrap.Bootstrapper) {

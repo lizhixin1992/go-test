@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/lizhixin1992/test/commons"
+	"github.com/lizhixin1992/go-test/commons"
 	"github.com/olivere/elastic"
 )
 

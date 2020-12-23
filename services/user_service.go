@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/lizhixin1992/test/dao"
-	"github.com/lizhixin1992/test/datasource"
-	"github.com/lizhixin1992/test/models"
+	"github.com/lizhixin1992/go-test/dao"
+	"github.com/lizhixin1992/go-test/datasource"
+	"github.com/lizhixin1992/go-test/models"
 )
 
 type UserService interface {

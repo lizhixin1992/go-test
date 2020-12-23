@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/lizhixin1992/test/models"
+	"github.com/lizhixin1992/go-test/models"
 )
 
 func main() {
